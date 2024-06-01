@@ -8,13 +8,48 @@
 </head>
 <body>
     <form action="#">
-        <select name="dropdown">
-            <option value="option1">Select your train</option>
-            <option value="option2">Pune Intercity SF Express</option>
-            <option value="option3">Mahalaxmi Express</option>
-            <option value="option4">Indore SF Express (NDLS - INDB)</option>
+        <select name="train" id="train-dropdown" onchange="updateStations()">
+            <option value="none">Select your train</option>
+            <option value="pune-intercity">Pune Intercity SF Express</option>
+            <option value="mahalaxmi">Mahalaxmi Express</option>
+            <option value="indore-sf">Indore SF Express (NDLS - INDB)</option>
+        </select>
+        <select name="station" id="station-dropdown" disabled>
+            <option value="none">Select your station</option>
         </select>
         <input type="submit" value="Submit">
     </form>
+
+    <script>
+        const stations = {
+            "pune-intercity": ["Pune", "Lonavala", "Kalyan", "Thane", "Mumbai CST"],
+            "mahalaxmi": ["Mumbai CST", "Dadar", "Thane", "Kalyan", "Pune", "Kolhapur"],
+            "indore-sf": ["New Delhi", "Mathura", "Agra", "Gwalior", "Indore"]
+        };
+
+        function updateStations() {
+            const trainDropdown = document.getElementById('train-dropdown');
+            const stationDropdown = document.getElementById('station-dropdown');
+            const selectedTrain = trainDropdown.value;
+
+            // Clear existing options
+            stationDropdown.innerHTML = '<option value="none">Select your station</option>';
+
+            if (selectedTrain === "none") {
+                stationDropdown.disabled = true;
+                return;
+            }
+
+            const selectedStations = stations[selectedTrain];
+            selectedStations.forEach(station => {
+                const option = document.createElement('option');
+                option.value = station.toLowerCase().replace(/\s/g, '-');
+                option.textContent = station;
+                stationDropdown.appendChild(option);
+            });
+
+            stationDropdown.disabled = false;
+        }
+    </script>
 </body>
 </html>
